@@ -142,7 +142,7 @@ class NodeVisitor(object):
 
     _method_cache = None
 
-    def visit(self, node):
+    def visit(self, node, *args, **kwargs):
         """ Visit a node.
         """
 
@@ -155,14 +155,14 @@ class NodeVisitor(object):
             visitor = getattr(self, method, self.generic_visit)
             self._method_cache[node.__class__.__name__] = visitor
 
-        return visitor(node)
+        return visitor(node, *args, **kwargs)
 
-    def generic_visit(self, node):
+    def generic_visit(self, node, *args, **kwargs):
         """ Called if no explicit visitor function exists for a
             node. Implements preorder visiting of the node.
         """
         for c in node:
-            self.visit(c)
+            self.visit(c, *args, **kwargs)
 
 class ArrayDecl(Node):
     __slots__ = ('type', 'dim', 'dim_quals', 'coord', '__weakref__')
